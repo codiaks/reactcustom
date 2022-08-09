@@ -4,6 +4,12 @@ import Example from "./examples";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from 'react-dnd-touch-backend'
+import Preview from 'react-dnd-preview';
+
+
+const generatePreview = ({itemType, item, style}) => {
+  return <div class="item-list__item" style={style}>{itemType}</div>;
+};
 
 const hasNative =
   document && (document.elementsFromPoint || document.msElementsFromPoint);
@@ -67,6 +73,7 @@ export default function EventComponent() {
     //backend={HTML5Backend}
       options={backendOptions}>
       <Example />
+      <Preview generator={generatePreview} />
     </DndProvider>
 
     //   <div
