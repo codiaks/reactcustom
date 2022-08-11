@@ -1,3 +1,10 @@
+# REACT CUSTOM APP
+
+This project is to test new features and packages before trying out on major projects 
+Already tried packages are tailwind css, react-dnd with touch support, strapi, custom drag and drop without any package
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
