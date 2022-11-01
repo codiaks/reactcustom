@@ -23,6 +23,11 @@ export default function Home() {
       path : '/antd_menu_horizontal',
       title : 'Antd Menu Horizontal'
     },
+    {
+      key : '4',
+      path : '/csv_download',
+      title : 'CSV download'
+    },
   ]
   return (
     <div className="mt-10">
