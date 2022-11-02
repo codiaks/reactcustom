@@ -28,6 +28,11 @@ export default function Home() {
       path : '/csv_download',
       title : 'CSV download'
     },
+    {
+      key : '5',
+      path : '/pdfme',
+      title : 'Pdf Me'
+    },
   ]
   return (
     <div className="mt-10">
