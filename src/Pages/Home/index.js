@@ -18,6 +18,21 @@ export default function Home() {
       path : '/touch_event',
       title : 'Touch Events'
     },
+    {
+      key : '3',
+      path : '/antd_menu_horizontal',
+      title : 'Antd Menu Horizontal'
+    },
+    {
+      key : '4',
+      path : '/csv_download',
+      title : 'CSV download'
+    },
+    {
+      key : '5',
+      path : '/pdfme',
+      title : 'Pdf Me'
+    },
   ]
   return (
     <div className="mt-10">
