@@ -363,7 +363,7 @@ export const CurrencyList = [
     symbol: "CVE",
     name_plural: "Cape Verdean escudos",
     code: "CVE",
-    symbol_native: "\u200B",
+    symbol_native: "$",//"\u200B",symbol not loaded in jsPdf google uses dollar symbol
     decimal_digits: 2,
     name: "Cape Verdean Escudo",
     rounding: 0.0,
@@ -966,7 +966,7 @@ export const CurrencyList = [
     symbol: "NPR",
     name_plural: "Nepalese rupees",
     code: "NPR",
-    symbol_native: "नेरू",
+    symbol_native: "रू",//"नेरू",
     decimal_digits: 2,
     name: "Nepalese Rupee",
     rounding: 0.0,

@@ -1,14 +1,21 @@
 import { BLANK_PDF, generate } from "@pdfme/generator";
 import { Button, Card, Form, Input, Select, Table } from "antd";
-import { CurrencyList } from "assets/data/currencies";
+//import { CurrencyList } from "assets/data/currencies";
 import { useEffect, useState } from "react";
-import DejaVuSansFont from "assets/fonts/DejaVuSans.ttf";
-import DubaiRegularFont from "assets/fonts/Dubai-Regular.ttf";
-import FreeSerifFont from "assets/fonts/FreeSerif.ttf";
-import OpenSansRegularFont from "assets/fonts/OpenSans-Regular.ttf";
-import NotoNaskhArabicUIRegularFont from "assets/fonts/NotoNaskhArabicUI-Regular.ttf";
-import AliceRegularFont from "assets/fonts/Alice-Regular.ttf";
-import RobotoRegularFont from "assets/fonts/Roboto-Regular.ttf";
+
+import DejaVuSans from "assets/fonts/DejaVuSans.ttf";
+import FreeSerif from "assets/fonts/FreeSerif.ttf";
+import Roboto from "assets/fonts/Roboto-Regular.ttf";
+import Mukta from "assets/fonts/Mukta-Regular.ttf";
+import NotoSerifArmenian from "assets/fonts/NotoSerifArmenian-Regular.ttf";
+import NotoSansSinhala from "assets/fonts/NotoSansSinhala-Regular.ttf";
+import ZenAntique from "assets/fonts/ZenAntique-Regular.ttf";
+import Overpass from "assets/fonts/Overpass-Regular.ttf";
+import NotoSansKhmer from "assets/fonts/NotoSansKhmer-Regular.ttf";
+import AbhayaLibre from "assets/fonts/AbhayaLibre-Regular.ttf";
+import Base64Fonts from "assets/data/Base64Fonts.json";
+import { CurrencyList } from "assets/data/AppCurrency";
+
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -32,196 +39,117 @@ const CreatePdf = () => {
   const [form] = Form.useForm();
   const [FormattedValue, setFormattedValue] = useState("");
   const [newCurrency, setnewCurrency] = useState([]);
-  const codes = [
-    "AED",
-    "AFN",
-    "ALL",
-    "AMD",
-    "ANG",
-    "AOA",
-    "ARS",
-    "AUD",
-    "AWG",
-    "AZN",
-    "BAM",
-    "BBD",
-    "BDT",
-    "BGN",
-    "BHD",
-    "BIF",
-    "BMD",
-    "BND",
-    "BOB",
-    "BOV",
-    "BRL",
-    "BSD",
-    "BTN",
-    "BWP",
-    "BYN",
-    "BZD",
-    "CAD",
-    "CDF",
-    "CHE",
-    "CHF",
-    "CHW",
-    "CLF",
-    "CLP",
-    "CNH",
-    "CNY",
-    "COP",
-    "COU",
-    "CRC",
-    "CUC",
-    "CUP",
-    "CVE",
-    "CZK",
-    "DJF",
-    "DKK",
-    "DOP",
-    "DZD",
-    "EGP",
-    "ERN",
-    "ETB",
-    "EUR",
-    "FJD",
-    "FKP",
-    "GBP",
-    "GEL",
-    "GHS",
-    "GIP",
-    "GMD",
-    "GNF",
-    "GTQ",
-    "GYD",
-    "HKD",
-    "HNL",
-    "HRK",
-    "HTG",
-    "HUF",
-    "IDR",
-    "ILS",
-    "INR",
-    "IQD",
-    "IRR",
-    "ISK",
-    "JMD",
-    "JOD",
-    "JPY",
-    "KES",
-    "KGS",
-    "KHR",
-    "KMF",
-    "KPW",
-    "KRW",
-    "KWD",
-    "KYD",
-    "KZT",
-    "LAK",
-    "LBP",
-    "LKR",
-    "LRD",
-    "LSL",
-    "LYD",
-    "MAD",
-    "MDL",
-    "MGA",
-    "MKD",
-    "MMK",
-    "MNT",
-    "MOP",
-    "MRO",
-    "MUR",
-    "MWK",
-    "MXN",
-    "MXV",
-    "MYR",
-    "MZN",
-    "NAD",
-    "NGN",
-    "NIO",
-    "NOK",
-    "NPR",
-    "NZD",
-    "OMR",
-    "PAB",
-    "PEN",
-    "PGK",
-    "PHP",
-    "PKR",
-    "PLN",
-    "PYG",
-    "QAR",
-    "RON",
-    "RSD",
-    "RUB",
-    "RWF",
-    "SAR",
-    "SBD",
-    "SCR",
-    "SDG",
-    "SEK",
-    "SGD",
-    "SHP",
-    "SLL",
-    "SOS",
-    "SRD",
-    "SSP",
-    "STN",
-    "SYP",
-    "SZL",
-    "THB",
-    "TJS",
-    "TND",
-    "TOP",
-    "TRY",
-    "TTD",
-    "TWD",
-    "TZS",
-    "UAH",
-    "UGX",
-    "USD",
-    "USN",
-    "UYI",
-    "UYU",
-    "UZS",
-    "VEF",
-    "VND",
-    "VUV",
-    "WST",
-    "XAF",
-    "XCD",
-    "XOF",
-    "XPF",
-    "YER",
-    "ZAR",
-    "ZMW",
-  ];
+  const [FontBase64, setFontBase64] = useState([]);
+  const doc = new jsPDF();
 
   useEffect(() => {
-    //let arr = [];
-    //CurrencyList.forEach((el) => {
-    //let {str,classn} = formatter(500);
-    for (let i = 0; i < CurrencyList.length; i++) {
-      let el = CurrencyList[i];
-      let classn = getCurrencyClass(el);
-      // let str =
-      //   el && el.symbol
-      //     ? `<span class="${classn}"> ${
-      //         el.symbol
-      //       }</span> ${500} (<span class="${classn}">${
-      //         el.symbol_native
-      //       }</span>)`
-      //     : 500;
-      let str =
-        el && el.symbol ? `${el.symbol} ${500} (${el.symbol_native})` : 500;
-      el.value = str;
-      CurrencyList[i] = el;
-      //arr.push(el);
+    try {
+      addFonts();
+      //let fontArray = JSON.parse(Base64Fonts);
+      setFontBase64(Base64Fonts);
+      for (let i = 0; i < CurrencyList.length; i++) {
+        let el = CurrencyList[i];
+        let classn = getCurrencyClass(el);
+        const fontName = getFontName(classn);
+        let str =
+          el && el.symbol ? `${el.symbol} ${500} ${el.symbol_native} ` : 500;
+        el.value = str;
+        //el.fontName = fontName || "";
+        CurrencyList[i] = el;
+        //arr.push(el);
+      }
+
+      setnewCurrency(CurrencyList);
+      console.log(CurrencyList);
+    } catch (err) {
+      console.log(err);
     }
-    setnewCurrency(CurrencyList);
-    //console.log(CurrencyList);
     //});
   }, []);
+
+  const addFonts = async (params) => {
+    try {
+      // define custom font
+      // ttf font file converted to base64
+      // following is Consolas with only hex digit glyphs defined (0-9, A-F)
+      // add custom font to file
+
+      let file1 = await fetch(DejaVuSans).then((res) => res.blob());
+      const font1 = await toBase64(file1);
+
+      let file2 = await fetch(Roboto).then((res) => res.blob());
+      const font2 = await toBase64(file2);
+
+      let file3 = await fetch(FreeSerif).then((res) => res.blob());
+      const font3 = await toBase64(file3);
+
+      let file4 = await fetch(Mukta).then((res) => res.blob());
+      const font4 = await toBase64(file4);
+
+      let file5 = await fetch(NotoSerifArmenian).then((res) => res.blob());
+      const font5 = await toBase64(file5);
+
+      let file6 = await fetch(NotoSansKhmer).then((res) => res.blob());
+      const font6 = await toBase64(file6);
+      let file7 = await fetch(Overpass).then((res) => res.blob());
+      const font7 = await toBase64(file7);
+      let file8 = await fetch(ZenAntique).then((res) => res.blob());
+      const font8 = await toBase64(file8);
+      let file9 = await fetch(NotoSansSinhala).then((res) => res.blob());
+      const font9 = await toBase64(file9);
+
+      let fontArray = [
+        {
+          fontName: "DejaVuSans",
+          base64: font1.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "Roboto",
+          base64: font2.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "FreeSerif",
+          base64: font3.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "Mukta",
+          base64: font4.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "NotoSerifArmenian",
+          base64: font5.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "NotoSansKhmer",
+          base64: font6.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "Overpass",
+          base64: font7.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "ZenAntique",
+          base64: font8.split(",")[1],
+          type: "normal",
+        },
+        {
+          fontName: "NotoSansSinhala",
+          base64: font9.split(",")[1],
+          type: "normal",
+        },
+      ];
+      setFontBase64(fontArray);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const formatter = (values) => {
     let Currency =
@@ -251,74 +179,95 @@ const CreatePdf = () => {
   };
 
   const getCurrencyClass = (currency) => {
-    const arabic = [
-      "AED",
-      "MAD",
-      "QAR",
-      "YER",
-      "ILS",
-      "INR",
-      "IQD",
-      "JOD",
-      "KWD",
-      "LYD",
-      "TND",
-      "BHD",
-      "DZD",
-      "SDG",
-      "SYP",
-      "OMR",
-      "AFN",
-      "AMD",
-      "DZD",
-      "EGP",
-    ];
-    const arabic_d = ["AFN"];
-    const bangla = ["BDT", "ETB"];
-    const armenia = ["AMD"];
-    const azerbaijan = ["AZN", "BGN", "GEL"];
-    const combodia = ["KHR"];
-    let classn = "latin";
-    if (arabic.includes(currency.code)) {
-      classn = "arabic";
-    } else if (bangla.includes(currency.code)) {
-      classn = "bangla";
-    } else if (arabic_d.includes(currency.code)) {
-      classn = "arabic_d";
-    } else if (armenia.includes(currency.code)) {
-      classn = "armenia";
-    } else if (azerbaijan.includes(currency.code)) {
-      classn = "azerbaijan";
-    } else if (combodia.includes(currency.code)) {
-      classn = "combodia";
+    try {
+      const arabic = [
+        "AED",
+        "MAD",
+        "QAR",
+        "YER",
+        "ILS",
+        "INR",
+        "IQD",
+        "JOD",
+        "KWD",
+        "LYD",
+        "TND",
+        "BHD",
+        "DZD",
+        "SDG",
+        "SYP",
+        "OMR",
+        "DZD",
+        "EGP",
+        "LBP",
+        "MRO",
+        "SAR",
+      ];
+      const arabic_d = ["AFN"];
+      const bangla = ["BDT", "ETB", "LKR"]; // "NPR"
+      const armenia = ["AMD"];
+      const azerbaijan = ["AZN", "BGN", "GEL", "TRY"];
+      const combodia = ["KHR"];
+      const japan = ["JPY"];
+      const nepalese = ["NPR"];
+
+      let classn = "latin";
+      if (arabic.includes(currency.code)) {
+        classn = "arabic";
+      } else if (bangla.includes(currency.code)) {
+        classn = "bangla";
+      } else if (arabic_d.includes(currency.code)) {
+        classn = "arabic_d";
+      } else if (armenia.includes(currency.code)) {
+        classn = "armenia";
+      } else if (azerbaijan.includes(currency.code)) {
+        classn = "azerbaijan";
+      } else if (combodia.includes(currency.code)) {
+        classn = "combodia";
+      } else if (japan.includes(currency.code)) {
+        classn = "japan";
+      } else if (nepalese.includes(currency.code)) {
+        classn = "nepalese";
+      }
+      return classn;
+    } catch (err) {
+      console.log(err);
     }
-    return classn;
   };
 
   const getFontName = (classn) => {
     let font = "";
     switch (classn) {
+      case "latin":
+        font = "DejaVuSans";
+        break;
       case "arabic":
         font = "DejaVuSans";
         break;
       case "arabic_d":
-        font = "NotoNaskhArabicUIRegular";
+        font = "Overpass";
         break;
       case "bangla":
         font = "FreeSerif";
         break;
       case "azerbaijan":
-        font = "Roboto";
+        font = "Overpass";
         break;
-      case "latin":
-        font = "";
+      case "combodia":
+        font = "Overpass";
         break;
-      case "rupee":
-        font = "";
+      case "japan":
+        font = "ZenAntique";
+        break;
+      case "armenia":
+        font = "NotoSerifArmenian";
+        break;
+      case "nepalese":
+        font = "Mukta";
         break;
 
       default:
-        font = "";
+        font = "DejaVuSans";
         break;
     }
     return font;
@@ -332,192 +281,11 @@ const CreatePdf = () => {
     );
   };
 
-  const onFinish = async (vals) => {
-    const { str, classn } = formatter(vals);
-    //console.log(vals, val);
-    setFormattedValue(str || "");
-    /**Empty Document */
-
-    const template = {
-      schemas: [
-        {
-          currency: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 6.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: getFontName(classn),
-          },
-          currency1: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 26.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: "DejaVuSans",
-          },
-          currency2: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 46.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: "DubaiRegular",
-          },
-          currency3: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 66.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: "FreeSerif",
-          },
-          currency4: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 86.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: "OpenSansRegular",
-          },
-          currency5: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 106.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: "NotoNaskhArabicUIRegular",
-          },
-          currency6: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 126.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: "AliceRegular",
-          },
-          currency7: {
-            type: "text",
-            position: {
-              x: 25.06,
-              y: 146.35,
-            },
-            width: 150,
-            height: 18.7,
-            fontSize: 16,
-            fontColor: "#" + randomDarkColors(),
-            fontName: "RobotoRegular",
-          },
-        },
-      ],
-      basePdf: BLANK_PDF,
-    };
-
-    const inputs = [
-      {
-        currency: `${getFontName(classn)} value is :- ${str} .`,
-        currency1: `"Dejavu" value is :- ${str} .`,
-        currency2: `"Dubai" The entered value is :- ${str} .`,
-        currency3: `"FreeSerif" The entered value is :- ${str} .`,
-        currency4: `"OpenSansRegular" The entered value is :- ${str} .`,
-        currency5: `"NotoNaskhArabicUIRegular" The entered value is :- ${str} .`,
-        currency6: `"AliceRegular" value is :- ${str} .`,
-        currency7: `"RobotoRegular" value is :- ${str} .`,
-      },
-    ];
-
-    /**
-     * COUNTRIES & FONTS
-      ARmenia : Noto Sans Armenian
-      Combodia : Noto Sans Khmer,
-     */
-    const font = {
-      DejaVuSans: {
-        data: await fetch(DejaVuSansFont).then((res) => res.arrayBuffer()),
-        fallback: true,
-      },
-      DubaiRegular: {
-        data: await fetch(DubaiRegularFont).then((res) => res.arrayBuffer()),
-        //fallback: true,
-      },
-      FreeSerif: {
-        data: await fetch(FreeSerifFont).then((res) => res.arrayBuffer()),
-        //fallback: true,
-      },
-      OpenSansRegular: {
-        data: await fetch(OpenSansRegularFont).then((res) => res.arrayBuffer()),
-        //fallback: true,
-      },
-      NotoNaskhArabicUIRegular: {
-        data: await fetch(NotoNaskhArabicUIRegularFont).then((res) =>
-          res.arrayBuffer()
-        ),
-        //fallback: true,
-      },
-      AliceRegular: {
-        data: await fetch(AliceRegularFont).then((res) => res.arrayBuffer()),
-        //fallback: true,
-      },
-      RobotoRegular: {
-        data: await fetch(RobotoRegularFont).then((res) => res.arrayBuffer()),
-        //fallback: true,
-      },
-    };
-    const pdf = await generate({ template, inputs, options: { font } });
-
-    // Node.js
-    // fs.writeFileSync(path.join(__dirname, 'test.pdf'), pdf);
-
-    // Browser
-    const blob = new Blob([pdf.buffer], { type: "application/pdf" });
-    window.open(URL.createObjectURL(blob));
-  };
-
   const onCurrencySelect = (params) => {
     const vals = form.getFieldValue();
-    //console.log(vals);
     const { str } = formatter(vals);
     setFormattedValue(str || "");
   };
-
-  function base64convert(file) {
-    console.clear();
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      console.log(e.target.result);
-    };
-    reader.readAsDataURL(file);
-    return reader;
-  }
 
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -527,94 +295,136 @@ const CreatePdf = () => {
       reader.onerror = (error) => reject(error);
     });
 
-
   const createPdf = async (params) => {
-    //CurrencyList
-    let file = await fetch(RobotoRegularFont).then((res) => res.blob());
-    console.log(file);
-    //const file = 'assets/fonts/Roboto-Regular.ttf';
-    const font = await toBase64(file);
-    console.log(font.split(','));
-    const doc = new jsPDF();
+    try {
+      //CurrencyList
+      let file1 = await fetch(DejaVuSans).then((res) => res.blob());
+      const font1 = await toBase64(file1);
+      let file2 = await fetch(Roboto).then((res) => res.blob());
+      const font2 = await toBase64(file2);
+      let file3 = await fetch(FreeSerif).then((res) => res.blob());
+      const font3 = await toBase64(file3);
+      let file4 = await fetch(Mukta).then((res) => res.blob());
+      const font4 = await toBase64(file4);
 
-    // define custom font
-    doc.addFileToVFS(
-      "RobotoRegular.ttf",
-      font.split(',')[1]
-      // ttf font file converted to base64
-      // following is Consolas with only hex digit glyphs defined (0-9, A-F)
-    ); // add custom font to file
+      let file5 = await fetch(NotoSerifArmenian).then((res) => res.blob());
+      const font5 = await toBase64(file5);
 
-    doc.addFont("RobotoRegular.ttf", "RobotoRegular", "normal");
+      let file6 = await fetch(NotoSansKhmer).then((res) => res.blob());
+      const font6 = await toBase64(file6);
+      let file7 = await fetch(Overpass).then((res) => res.blob());
+      const font7 = await toBase64(file7);
+      let file8 = await fetch(ZenAntique).then((res) => res.blob());
+      const font8 = await toBase64(file8);
+      let file9 = await fetch(NotoSansSinhala).then((res) => res.blob());
+      const font9 = await toBase64(file9);
 
-//    autoTable(doc, { html: "#my-table" });
+      doc.addFileToVFS("DejaVuSans.ttf", font1.split(",")[1]);
+      doc.addFont("DejaVuSans.ttf", "DejaVuSans", "normal");
 
-    // Or use javascript directly:
-    let list = [];
-    newCurrency.forEach((el) => {
-      let ar = [el.code, el.name, el.value];
-      list.push(ar);
-    });
-    doc.setFont("RobotoRegular");
-    autoTable(doc, {
-      theme: "grid",
-      head: [["code", "Name", "Value"]],
-      body: list,
-      styles:{font:"RobotoRegular"}
-      // didDrawCell: async (data) => {
-      //   //console.log(data);
-      //   if (
-      //     data.section === "body"
-      //     //&&
-      //     //data.column.index === config.table.avatar.index
-      //   ) {
-      //     if (
-      //       data.cell.raw !== "" &&
-      //       data.cell.raw !== null &&
-      //       data.cell.raw !== undefined
-      //     ) {
-      //       doc.addImage(
-      //         data.cell.raw,
-      //         "PNG",
-      //         data.cell.x + 2,
-      //         data.cell.y + 2,
-      //         data.cell.width - 10,
-      //         data.cell.height - 3
-      //       );
-      //     }
-      //   }
-      // },
-    });
-    // var y = 20;
-    // doc.setLineWidth(2);
-    // doc.text(200, y = y + 30, "TOTAL MARKS OF STUDENTS");
-    // doc.autoTable({
-    //     html: '#simple_table',
-    //     startY: 70,
-    //     theme: 'grid',
-    //     columnStyles: {
-    //         0: {
-    //             cellWidth: 30,
-    //         },
-    //         1: {
-    //             cellWidth: 30,
-    //         },
-    //         2: {
-    //             cellWidth: 30,
-    //         }
-    //     },
-    //     styles: {
-    //         minCellHeight: 15
-    //     }
-    // })
+      // doc.addFileToVFS("Roboto.ttf", font2.split(",")[1]);
+      // doc.addFont("Roboto.ttf", "Roboto", "normal");
 
-    doc.output("dataurlnewwindow", { filename: "title" });
+      doc.addFileToVFS("FreeSerif.ttf", font3.split(",")[1]);
+      doc.addFont("FreeSerif.ttf", "FreeSerif", "normal");
+
+      doc.addFileToVFS("Mukta.ttf", font4.split(",")[1]);
+      doc.addFont("Mukta.ttf", "Mukta", "normal");
+
+      doc.addFileToVFS("NotoSerifArmenian.ttf", font5.split(",")[1]);
+      doc.addFont("NotoSerifArmenian.ttf", "NotoSerifArmenian", "normal");
+
+      doc.addFileToVFS("NotoSansKhmer.ttf", font6.split(",")[1]);
+      doc.addFont("NotoSansKhmer.ttf", "NotoSansKhmer", "normal");
+
+      doc.addFileToVFS("Overpass.ttf", font7.split(",")[1]);
+      doc.addFont("Overpass.ttf", "Overpass", "normal");
+
+      doc.addFileToVFS("ZenAntique.ttf", font8.split(",")[1]);
+      doc.addFont("ZenAntique.ttf", "ZenAntique", "normal");
+      doc.addFileToVFS("NotoSansSinhala.ttf", font9.split(",")[1]);
+      doc.addFont("NotoSansSinhala.ttf", "NotoSansSinhala", "normal");
+
+      // Or use javascript directly:
+      // FontBase64.forEach((element) => {
+      //   doc.addFileToVFS(element.fontName + ".ttf", element.base64);
+      //   doc.addFont(element.fontName + ".ttf", element.fontName, element.type);
+      //   console.log(element.fontName + ".ttf", element.fontName);
+      // });
+      let list = [];
+      newCurrency.forEach((el) => {
+        let ar = [el.code, el.name, el.value];
+        list.push(ar);
+      });
+      //doc.setFont("Roboto");
+      const indexOfColumn = 2;
+      console.log(doc.getFontList());
+      doc.setFont("NotoSansSinhala");
+      doc.text("hi mama  රු", 15, 5);
+      autoTable(doc, {
+        theme: "grid",
+        head: [["code", "Name", "Value"]],
+        body: list,
+        //styles: { font: "DejaVuSans" },
+        didParseCell: async (data) => {
+          if (data.section === "body" && data.column.index === indexOfColumn) {
+            if (
+              data.cell.raw !== "" &&
+              data.cell.raw !== null &&
+              data.cell.raw !== undefined
+            ) {
+              let Currency =
+                data.row.raw && data.row.raw[0]
+                  ? newCurrency.find((x) => x.code === data.row.raw[0])
+                  : {};
+              // const classn = getCurrencyClass(Currency);
+              // const fontName = getFontName(classn);
+              let text =
+                Currency && Currency.symbol
+                  ? `${Currency.symbol} ${500} ${Currency.symbol_native} ${
+                      Currency.fontName
+                    }`
+                  : 500;
+              data.cell.text = [text];
+              //console.log(data.cell.text, Currency);
+              data.cell.styles.font = Currency.fontName;
+            }
+          }
+        },
+      });
+
+      doc.output("dataurlnewwindow", { filename: "title" });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const download = async (text, filename, type) => {
+    var a = document.getElementById("a");
+    let currencies = JSON.stringify(FontBase64);
+
+    var file = new Blob([currencies], { type: type });
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
   };
 
   return (
     <>
       <Card>
-        <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+        <a href="#" id="a">
+          click here to download your file
+        </a>
+        <button
+          onClick={download(
+            "file text",
+            "Base64Fonts.json",
+            "text/plain;charset=utf-8"
+          )}
+        >
+          Create file
+        </button>
+
+        <Form {...layout} form={form} name="control-hooks">
           <Form.Item
             name="value"
             label="Value"
